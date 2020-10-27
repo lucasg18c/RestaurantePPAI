@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar preparación de pedido</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <ul>
+            <li>
+                <h3>Restaurante CoronaByte</h3>
+            </li>
+            <li>
+                <h1>PEDIDOS (sector Parrilla)</h1>
+            </li>
+        </ul>
+    </nav>
+
+    <section>
+
+        <div class="ordenamiento">
+            <ul>
+                <li>
+                    <label for="ordenar">Ordenar por:</label>
+                </li>
+                <li>
+                    <select name="ordenar" id="cmbOrdenar">
+                <option value="tiempo">Tiempo de espera</option>
+                <option value="seccion">Sección</option>
+                <option value="mesa">Mesa</option>
+                <option value="mozo">Mozo</option>
+            </select>
+                </li>
+            </ul>
+        </div>
+
+        <table>
+            <tr>
+                <th>Estado Pedido</th>
+                <th>Nombre Pedido</th>
+                <th>Menú</th>
+                <th>Cantidad</th>
+                <th>Número Mesa</th>
+                <th>Tiempo de Espera</th>
+                <th>Finalizar</th>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Hamburguesa</td>
+                <td>N/D</td>
+                <td>3</td>
+                <td>8</td>
+                <td>20 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Hamburguesa</td>
+                <td>N/D</td>
+                <td>3</td>
+                <td>8</td>
+                <td>20 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Hamburguesa</td>
+                <td>N/D</td>
+                <td>3</td>
+                <td>8</td>
+                <td>20 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Parrillada</td>
+                <td>Puerto Madero</td>
+                <td>1</td>
+                <td>10</td>
+                <td>25 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Hamburguesa</td>
+                <td>N/D</td>
+                <td>3</td>
+                <td>8</td>
+                <td>20 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td>En preparación</td>
+                <td>Parrillada</td>
+                <td>Puerto Madero</td>
+                <td>1</td>
+                <td>10</td>
+                <td>25 min</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+        </table>
+
+        <ul class="botones">
+
+            <li>
+                <input type="button" value="Finalizar pedidos">
+            </li>
+
+            <li>
+                <input type="button" value="Cancelar">
+            </li>
+
+        </ul>
+
+    </section>
+
+</body>
+
+</html>
