@@ -46,7 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Negocio\AsignacionMesa.cs" />
+    <Compile Include="Negocio\SectorComanda.cs" />
+    <Compile Include="Negocio\Producto.cs" />
+    <Compile Include="Negocio\ProductoDeCarta.cs" />
+    <Compile Include="Negocio\Menu.cs" />
+    <Compile Include="Negocio\Pedido.cs" />
+    <Compile Include="Negocio\Mesa.cs" />
+    <Compile Include="Negocio\Empleado.cs" />
+    <Compile Include="Negocio\HistorialEstado.cs" />
+    <Compile Include="Negocio\GestorFinalizarPreparacion.cs" />
     <Compile Include="Negocio\DetalleDePedido.cs" />
+    <Compile Include="Soporte\Interface1.cs" />
+    <Compile Include="Soporte\ISujetoDetallePedido.cs" />
     <Compile Include="PantallaFinalizarPreparacionPedido.cs">
       <SubType>Form</SubType>
     </Compile>

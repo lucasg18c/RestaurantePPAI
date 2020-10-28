@@ -8,5 +8,19 @@ namespace RestaurantePPAI.Negocio
 {
     public class DetalleDePedido
     {
+        private String cantidad;
+        private HistorialEstado historialEstado;
+        private String hora;
+        private int precio;
+       
+
+        public DetalleDePedido(string cantidad,
+             string hora, int precio)
+        {
+            this.cantidad = cantidad;
+            
+            this.hora = hora;
+            this.precio = precio;
+        }
     }
 }
