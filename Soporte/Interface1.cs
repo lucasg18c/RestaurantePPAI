@@ -8,7 +8,7 @@ namespace RestaurantePPAI.Soporte
 {
     interface IObservadorDetalleDePedido
     {
-        public void actualizar(String numeroMesa, String estado,
-            String hora, String cantidadProductos, String mozo) { };
+        void actualizar(String numeroMesa, String estado,
+            String hora, String cantidadProductos, String mozo);
     }
 }

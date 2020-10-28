@@ -8,15 +8,15 @@ namespace RestaurantePPAI.Soporte
 {
     interface ISujetoDetallePedido
     {
-        private void IObservadorDetalleDePedido[] observadores;
+        //private IObservadorDetalleDePedido[] observadores;
 
-        public void notificar() { };
+        void notificar();
 
-        public void quitar(IObservadorDetalleDePedido observador) { };
+        void quitar(IObservadorDetalleDePedido observador);
 
-        public void suscribir(IObservadorDetalleDePedido observador) { };
+        void suscribir(IObservadorDetalleDePedido observador);
 
-        public void tomarConfFinalizar() { };
+        void tomarConfFinalizar();
 
 
     }

@@ -10,12 +10,12 @@ namespace RestaurantePPAI.Negocio
     {
         private String cantidad;
         private HistorialEstado historialEstado;
-        private String hora;
+        private DateTime hora;
         private int precio;
        
 
         public DetalleDePedido(string cantidad,
-             string hora, int precio)
+             DateTime hora, int precio)
         {
             this.cantidad = cantidad;
             

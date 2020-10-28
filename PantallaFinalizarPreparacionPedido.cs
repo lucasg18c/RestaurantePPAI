@@ -13,6 +13,8 @@ namespace RestaurantePPAI
 {
     public partial class PantallaFinalizarPreparacionPedido : Form
     {
+        private GestorFinalizarPreparacion gestor;
+        private List<DetalleDePedido> detalles;
 
         public PantallaFinalizarPreparacionPedido()
         {
@@ -34,37 +36,37 @@ namespace RestaurantePPAI
 
         public void solicitarConfirmacionElaboracionProducto()
         {
+            DialogResult r = MessageBox.Show(
+                "Desea confirmar la finalización de la preparación de los productos seleccionados?",
+                "Confirmar finalización",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
+            if (tomarConfirmarElaboracion(r))
+            {
+                gestor.confirmarElaboracion();
+            }
         }
 
-        public void solicitarSeleccionDeUnoOVariosDetalles()
-        {
 
+        public bool tomarConfirmarElaboracion(DialogResult r)
+        {
+            return r == DialogResult.Yes;
         }
 
-        public void tomarConfirmarElaboracion()
+
+        public void tomarSeleccionDeDetalle(int fila)
         {
-
-        }
-
-        public void tomarOpcionFinalizarPedido()
-        {
-
-        }
-
-        public void tomarSeleccionDeDetalle()
-        {
-
+            //gestor.detalleDePedidoSeleccionado(detalles[fila]);
         }
 
         private void abrirVentana(object sender, EventArgs e)
         {
             cargarCombo();
 
-            mostrarDatosDetallePedidoEnPreparacion("hamburguesa", "-", 3, 21, DateTime.Now);
-            mostrarDatosDetallePedidoEnPreparacion("pizza", "-", 1, 14, DateTime.Now);
-            mostrarDatosDetallePedidoEnPreparacion("milanesa", "re piola", 5, 3, DateTime.Now);
-            mostrarDatosDetallePedidoEnPreparacion("zapallo", "#vegan4lifeXD", 9, 7, DateTime.Now);
+            gestor = new GestorFinalizarPreparacion(this);
+            gestor.finalizarPedido();
+
 
         }
 
@@ -79,12 +81,33 @@ namespace RestaurantePPAI
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-
+            Close();
         }
 
         private void btnFinalizar_Click(object sender, EventArgs e)
         {
+            bool haySeleccionados = false;
 
+            for (int i = 0; i < grillaPedidos.Rows.Count; i++)
+            {
+                DataGridViewCheckBoxCell celda = (DataGridViewCheckBoxCell) grillaPedidos.Rows[i].Cells[5];
+                if (celda.Value != null)
+                {
+                    tomarSeleccionDeDetalle(i);
+                    haySeleccionados = true;
+                }
+            }
+            if (haySeleccionados) solicitarConfirmacionElaboracionProducto();
+            else mostrarErrorSinSeleccionados();
+        }
+
+        private void mostrarErrorSinSeleccionados()
+        {
+            MessageBox.Show(
+                "No hay detalles seleccionados",
+                "Ocurrió un error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         private void cmbOrdenar_SelectedIndexChanged(object sender, EventArgs e)
