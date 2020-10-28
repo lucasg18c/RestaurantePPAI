@@ -13,17 +13,23 @@ namespace RestaurantePPAI
 {
     public partial class PantallaFinalizarPreparacionPedido : Form
     {
-        private DetalleDePedido[] listaDetallesAServir;
-        private DetalleDePedido[] listaDetallesEnPreparacion;
 
         public PantallaFinalizarPreparacionPedido()
         {
             InitializeComponent();
         }
 
-        public void mostrarDatosDetallePedidoEnPreparacion()
+        public void mostrarDatosDetallePedidoEnPreparacion(string nombreProducto, string nombreMenu, int cantidad, int numeroMesa, DateTime hora)
         {
-
+            string[] fila = new string[]
+            {
+                nombreProducto,
+                nombreMenu,
+                cantidad.ToString(),
+                numeroMesa.ToString(),
+                hora.ToString("hh:mm:ss")
+            };
+            grillaPedidos.Rows.Add(fila);
         }
 
         public void solicitarConfirmacionElaboracionProducto()
@@ -54,6 +60,12 @@ namespace RestaurantePPAI
         private void abrirVentana(object sender, EventArgs e)
         {
             cargarCombo();
+
+            mostrarDatosDetallePedidoEnPreparacion("hamburguesa", "-", 3, 21, DateTime.Now);
+            mostrarDatosDetallePedidoEnPreparacion("pizza", "-", 1, 14, DateTime.Now);
+            mostrarDatosDetallePedidoEnPreparacion("milanesa", "re piola", 5, 3, DateTime.Now);
+            mostrarDatosDetallePedidoEnPreparacion("zapallo", "#vegan4lifeXD", 9, 7, DateTime.Now);
+
         }
 
         private void cargarCombo()
@@ -77,7 +89,6 @@ namespace RestaurantePPAI
 
         private void cmbOrdenar_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
     }
 }
