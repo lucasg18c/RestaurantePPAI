@@ -1,0 +1,10 @@
+C:\Users\lucas\Desktop\RestaurantePPAI\bin\Debug\RestaurantePPAI.exe.config
+C:\Users\lucas\Desktop\RestaurantePPAI\bin\Debug\RestaurantePPAI.exe
+C:\Users\lucas\Desktop\RestaurantePPAI\bin\Debug\RestaurantePPAI.pdb
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.csprojAssemblyReference.cache
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.Properties.Resources.resources
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.csproj.GenerateResource.cache
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.csproj.CoreCompileInputs.cache
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.exe
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.pdb
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.PantallaFinalizarPreparacionPedido.resources
