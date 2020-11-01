@@ -12,9 +12,9 @@ namespace RestaurantePPAI.Soporte
 
         void notificar();
 
-        void quitar(IObservadorDetalleDePedido observador);
+        void quitar(IObservadorDetallePedido observador);
 
-        void suscribir(IObservadorDetalleDePedido observador);
+        void suscribir(IObservadorDetallePedido observador);
 
         void tomarConfFinalizar();
 

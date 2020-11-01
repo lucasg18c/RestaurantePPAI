@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestaurantePPAI.Persistencia;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace RestaurantePPAI.Negocio
         //private InterfazMonitor monitor;
 
         private List<DetalleDePedido> detallePedidoSeleccionadosAServir; 
-        private List<DetalleDePedido> datosPedidoEnPreparacion; 
+        private List<DetalleDePedido> detallesPedidoEnPreparacion = new List<DetalleDePedido>(); 
         private List<DetalleDePedido> detallePedidoNotificados;
 
         private PantallaFinalizarPreparacionPedido pantalla;
@@ -27,21 +28,88 @@ namespace RestaurantePPAI.Negocio
         public void finalizarPedido()
         {
             buscarDetallesPedidoEnPreparacion();
-            ordenarSegunTiempoEspera();
+            ordenarSegunMayorTiempoEspera();
+
+            string[] datosDetallesEnPreparacion;
+
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count; i++)
+            {
+                datosDetallesEnPreparacion = buscarInfoDetallePedido(detallesPedidoEnPreparacion[i]);
+                pantalla.mostrarDatosDetallePedidoEnPreparacion(
+                    datosDetallesEnPreparacion[0],
+                    datosDetallesEnPreparacion[1],
+                    datosDetallesEnPreparacion[2],
+                    datosDetallesEnPreparacion[3],
+                    datosDetallesEnPreparacion[4]);
+            }
         }
 
-        private void ordenarSegunTiempoEspera()
+        private string[] buscarInfoDetallePedido(DetalleDePedido detalle)
         {
-            //TODO
-            //temporal
-            pantalla.mostrarDatosDetallePedidoEnPreparacion("hamburguesa", "-", 3, 21, DateTime.Now);
-            pantalla.mostrarDatosDetallePedidoEnPreparacion("pizza", "-", 1, 14, DateTime.Now);
-            pantalla.mostrarDatosDetallePedidoEnPreparacion("milanesa", "re piola", 5, 3, DateTime.Now);
-            pantalla.mostrarDatosDetallePedidoEnPreparacion("zapallo", "#vegan4lifeXD", 9, 7, DateTime.Now);
+            string[] datos = new string[5];
+            Mesa[] mesas = (Mesa[]) FachadaPersistencia.getInstancia().Materializar(typeof(Mesa));
+            Pedido[] pedidos = (Pedido[]) FachadaPersistencia.getInstancia().Materializar(typeof(Pedido));
+
+            datos[0] = detalle.getHora().ToString("hh:mm:ss");
+            datos[1] = detalle.mostrarNombreProducto();
+            datos[2] = detalle.mostrarNombreMenu();
+            datos[3] = detalle.getCantidad();
+            datos[4] = detalle.mostrarMesa(mesas, pedidos);
+
+            return datos;
+        }
+
+        private void ordenarSegunMayorTiempoEspera()
+        {
+            DateTime hora = getFechaHoraActual();
+
+            if (detallesPedidoEnPreparacion.Count <= 1) return;
+
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
+            {
+                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
+                {
+                    int esperai = detallesPedidoEnPreparacion[i].calcularEspera(hora);
+                    int esperaj = detallesPedidoEnPreparacion[j].calcularEspera(hora);
+                    if ( esperai < esperaj)
+                    {
+                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
+                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
+                        detallesPedidoEnPreparacion[j] = temp;
+                    }
+                }
+            }            
+        }
+
+        private DateTime getFechaHoraActual()
+        {
+            return DateTime.Now;
         }
 
         private void buscarDetallesPedidoEnPreparacion()
         {
+            DetalleDePedido[] detalles = (DetalleDePedido[]) FachadaPersistencia.getInstancia().Materializar(typeof(DetalleDePedido));
+            Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
+            
+            Estado enPreparacion = new Estado();
+
+            foreach (Estado e in estados)
+            {
+                if (e.esAmbitoDetallePedido() && e.esEnPreparacion())
+                {
+                    enPreparacion = e;
+                    break;
+                }
+            }
+
+            foreach (DetalleDePedido dp in detalles)
+            {
+                if (dp.estaEnPreparacion(enPreparacion))
+                {
+                    detallesPedidoEnPreparacion.Add(dp);
+                }
+            }
+
 
         }
 

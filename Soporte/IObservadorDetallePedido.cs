@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Soporte
 {
-    interface IObservadorDetalleDePedido
+    public interface IObservadorDetallePedido
     {
-        void actualizar(String numeroMesa, String estado,
-            String hora, String cantidadProductos, String mozo);
+        void actualizar(string numeroMesa, string estado, DateTime hora, string cantidadProducto, string mozo);
     }
 }

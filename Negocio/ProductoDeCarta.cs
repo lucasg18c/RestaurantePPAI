@@ -6,10 +6,27 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Negocio
 {
-    class ProductoDeCarta
+    public class ProductoDeCarta
     {
-        private Boolean esFavorito;
-        private float precio;
+        private bool esFavorito;
+        private double precio;
         private Producto producto;
+
+        public ProductoDeCarta(Producto producto)
+        {
+            this.producto = producto;
+            esFavorito = true;
+            precio = producto.getPrecio();
+        }
+
+        public double getPrecio()
+        {
+            return precio;
+        }
+
+        public string mostrarProducto()
+        {
+            return producto.getNombre();
+        }
     }
 }

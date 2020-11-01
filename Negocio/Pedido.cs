@@ -6,11 +6,43 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Negocio
 {
-    class Pedido
+    public class Pedido
     {
-        private HistorialEstado historialEstado;
+        private List<HistorialEstado> historialEstado = new List<HistorialEstado>();
         private int numeroPedido;
         private string fechaHoraPedido;
-        private DetalleDePedido detalle;
+        private List<DetalleDePedido> detalle = new List<DetalleDePedido>();
+
+        public string mostrarMesa(Mesa[] mesas)
+        {
+            Mesa mesaActual = new Mesa(0);
+
+            foreach (Mesa m in mesas)
+            {
+                if (m.tienePedido(this))
+                {
+                    mesaActual = m;
+                    break;
+                }
+            }
+            return mesaActual.mostrarMesa();
+        }
+
+        public bool tieneDetalle(DetalleDePedido detalleDePedido)
+        {
+            foreach (DetalleDePedido d in detalle)
+            {
+                if (d == detalleDePedido)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void agregarDetalle(DetalleDePedido dp)
+        {
+            detalle.Add(dp);
+        }
     }
 }

@@ -21,15 +21,15 @@ namespace RestaurantePPAI
             InitializeComponent();
         }
 
-        public void mostrarDatosDetallePedidoEnPreparacion(string nombreProducto, string nombreMenu, int cantidad, int numeroMesa, DateTime hora)
+        public void mostrarDatosDetallePedidoEnPreparacion(string hora, string nombreProducto, string nombreMenu, string cantidad, string numeroMesa)
         {
             string[] fila = new string[]
             {
                 nombreProducto,
                 nombreMenu,
-                cantidad.ToString(),
-                numeroMesa.ToString(),
-                hora.ToString("hh:mm:ss")
+                cantidad,
+                numeroMesa,
+                hora
             };
             grillaPedidos.Rows.Add(fila);
         }
@@ -68,6 +68,12 @@ namespace RestaurantePPAI
             gestor.finalizarPedido();
 
 
+        }
+
+        // METODO PARA PRUEBAS
+        public void mostrarError(string s)
+        {
+            MessageBox.Show(s);
         }
 
         private void cargarCombo()

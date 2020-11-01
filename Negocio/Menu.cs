@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Negocio
 {
-    class Menu
+    public class Menu
     {
         private string nombre;
         private float precio;
 
+        public string getNombre()
+        {
+            return nombre;
+        }
     }
 }

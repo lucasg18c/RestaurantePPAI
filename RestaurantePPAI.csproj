@@ -47,6 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Negocio\AsignacionMesa.cs" />
+    <Compile Include="Negocio\Estado.cs" />
+    <Compile Include="Persistencia\FachadaPersistencia.cs" />
+    <Compile Include="Presentacion\InterfazDispositivoMovil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\InterfazDispositivoMovil.Designer.cs">
+      <DependentUpon>InterfazDispositivoMovil.cs</DependentUpon>
+    </Compile>
     <Compile Include="Negocio\SectorComanda.cs" />
     <Compile Include="Negocio\Producto.cs" />
     <Compile Include="Negocio\ProductoDeCarta.cs" />
@@ -57,17 +65,17 @@
     <Compile Include="Negocio\HistorialEstado.cs" />
     <Compile Include="Negocio\GestorFinalizarPreparacion.cs" />
     <Compile Include="Negocio\DetalleDePedido.cs" />
-    <Compile Include="Soporte\Interface1.cs" />
+    <Compile Include="Soporte\IObservadorDetallePedido.cs" />
     <Compile Include="Soporte\ISujetoDetallePedido.cs" />
-    <Compile Include="PantallaFinalizarPreparacionPedido.cs">
+    <Compile Include="Presentacion\PantallaFinalizarPreparacionPedido.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PantallaFinalizarPreparacionPedido.Designer.cs">
+    <Compile Include="Presentacion\PantallaFinalizarPreparacionPedido.Designer.cs">
       <DependentUpon>PantallaFinalizarPreparacionPedido.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PantallaFinalizarPreparacionPedido.resx">
+    <EmbeddedResource Include="Presentacion\PantallaFinalizarPreparacionPedido.resx">
       <DependentUpon>PantallaFinalizarPreparacionPedido.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

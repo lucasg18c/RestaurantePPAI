@@ -8,18 +8,30 @@ namespace RestaurantePPAI.Negocio
 {
     class HistorialEstado
     {
-        private String estado;
-        private String fechaHoraFin;
-        private String fechaHoraInicio;
+        private Estado estado;
+        private DateTime fechaHoraFin;
+        private DateTime fechaHoraInicio;
 
-        public HistorialEstado(string estado, string fechaHoraFin, string fechaHoraInicio)
+        public HistorialEstado(Estado estado, DateTime fechaHoraInicio)
         {
             this.estado = estado;
-            this.fechaHoraFin = fechaHoraFin;
             this.fechaHoraInicio = fechaHoraInicio;
         }
 
+        public bool esEnPreparacion()
+        {
+            return estado.esEnPreparacion();
+        }
 
+        public bool esUltimoHistorial()
+        {
+            return fechaHoraFin == new DateTime();
+        }
+
+        public bool esEstado(Estado enPreparacion)
+        {
+            return estado == enPreparacion;
+        }
     }
 
 }

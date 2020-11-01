@@ -176,7 +176,7 @@
             this.grillaPedidos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(157)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI Semilight", 13F);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI Semilight", 12F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(157)))), ((int)(((byte)(250)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -214,30 +214,35 @@
             this.producto.HeaderText = "Producto";
             this.producto.Name = "producto";
             this.producto.ReadOnly = true;
+            this.producto.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // menu
             // 
             this.menu.HeaderText = "Menú";
             this.menu.Name = "menu";
             this.menu.ReadOnly = true;
+            this.menu.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cantidad
             // 
             this.cantidad.HeaderText = "Cantidad";
             this.cantidad.Name = "cantidad";
             this.cantidad.ReadOnly = true;
+            this.cantidad.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // mesa
             // 
             this.mesa.HeaderText = "Número de Mesa";
             this.mesa.Name = "mesa";
             this.mesa.ReadOnly = true;
+            this.mesa.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tiempo
             // 
             this.tiempo.HeaderText = "Hora registrado";
             this.tiempo.Name = "tiempo";
             this.tiempo.ReadOnly = true;
+            this.tiempo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // finalizar
             // 
