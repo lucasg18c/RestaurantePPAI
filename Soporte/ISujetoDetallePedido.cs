@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Soporte
 {
-    interface ISujetoDetallePedido
+    public interface ISujetoDetallePedido
     {
-        //private IObservadorDetalleDePedido[] observadores;
+        //IObservadorDetallePedido[] observadores;
 
         void notificar();
 
         void quitar(IObservadorDetallePedido observador);
 
-        void suscribir(IObservadorDetallePedido observador);
-
-        void tomarConfFinalizar();
-
+        void suscribir(IObservadorDetallePedido[] observador);
 
     }
 }

@@ -14,7 +14,6 @@ namespace RestaurantePPAI
     public partial class PantallaFinalizarPreparacionPedido : Form
     {
         private GestorFinalizarPreparacion gestor;
-        private List<DetalleDePedido> detalles;
 
         public PantallaFinalizarPreparacionPedido()
         {
@@ -57,7 +56,7 @@ namespace RestaurantePPAI
 
         public void tomarSeleccionDeDetalle(int fila)
         {
-            //gestor.detalleDePedidoSeleccionado(detalles[fila]);
+            gestor.detalleDePedidoSeleccionado(fila);
         }
 
         private void abrirVentana(object sender, EventArgs e)
@@ -118,6 +117,11 @@ namespace RestaurantePPAI
 
         private void cmbOrdenar_SelectedIndexChanged(object sender, EventArgs e)
         {
+        }
+
+        public void limpiar()
+        {
+            grillaPedidos.Rows.Clear();
         }
     }
 }

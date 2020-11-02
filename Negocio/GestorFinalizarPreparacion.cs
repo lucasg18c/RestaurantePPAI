@@ -1,4 +1,5 @@
 ﻿using RestaurantePPAI.Persistencia;
+using RestaurantePPAI.Soporte;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,18 @@ using System.Threading.Tasks;
 
 namespace RestaurantePPAI.Negocio 
 {
-    public class GestorFinalizarPreparacion {
+    public class GestorFinalizarPreparacion : ISujetoDetallePedido{
         //private Estado estado;
         //private Sesion sesion;
         //private InterfazDispositivoMovil dispositivoMovil;
         //private InterfazMonitor monitor;
 
-        private List<DetalleDePedido> detallePedidoSeleccionadosAServir; 
+        private List<DetalleDePedido> detallePedidoSeleccionadosAServir = new List<DetalleDePedido>(); 
         private List<DetalleDePedido> detallesPedidoEnPreparacion = new List<DetalleDePedido>(); 
-        private List<DetalleDePedido> detallePedidoNotificados;
+        private List<DetalleDePedido> detallePedidoNotificados = new List<DetalleDePedido>();
+
+        private List<IObservadorDetallePedido> observadores = new List<IObservadorDetallePedido>();
+
 
         private PantallaFinalizarPreparacionPedido pantalla;
 
@@ -113,21 +117,123 @@ namespace RestaurantePPAI.Negocio
 
         }
 
-        public void detalleDePedidoSeleccionado(DetalleDePedido detalle)
+        public void detalleDePedidoSeleccionado(int indice)
         {
-            detallePedidoSeleccionadosAServir.Add(detalle);
+            detallePedidoSeleccionadosAServir.Add(detallesPedidoEnPreparacion[ indice ]);
         }
-
-        private void notificar() { }
-
-        public void notificarEstadoDetalleDePedido() { }
 
         public void confirmarElaboracion()
         {
+            obtenerObservadores();
+            actualizarEstadoDetallePedido();
+            notificar();
+            actualizarEstadoDetallePedidoNotificado();
+
+            finCU();
+
         }
 
-        public void quitar() { }
-        public void suscribir() { }
-            
+        private void finCU()
+        {
+            foreach (DetalleDePedido dselec in detallePedidoSeleccionadosAServir)
+            {
+                foreach (DetalleDePedido d in detallesPedidoEnPreparacion)
+                {
+                    if (dselec == d)
+                    {
+                        detallesPedidoEnPreparacion.Remove(d);
+                        break;
+                    }
+                }
+
+            }
+
+            detallePedidoSeleccionadosAServir = new List<DetalleDePedido>();
+            detallesPedidoEnPreparacion = new List<DetalleDePedido>();
+            pantalla.limpiar();
+            finalizarPedido();
+
+        }
+
+        private void actualizarEstadoDetallePedidoNotificado()
+        {
+            Estado estadoNotificado = new Estado();
+            Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
+            DateTime horaActual = getFechaHoraActual();
+
+            foreach (Estado e in estados)
+            {
+                if (e.esAmbitoDetallePedido() && e.esNotificado())
+                {
+                    estadoNotificado = e;
+                    break;
+                }
+            }
+
+            foreach (DetalleDePedido dp in detallePedidoSeleccionadosAServir)
+            {
+                dp.notificar(estadoNotificado, horaActual);
+            }
+        }
+
+        private void obtenerObservadores()
+        {
+            List<IObservadorDetallePedido> interfacesMovil = Program.getMozosMovil();
+            //List<IObservadorDetallePedido> interfacesMonitor = Program.getMozosMonitor();
+
+            suscribir(interfacesMovil.ToArray());
+            //suscribir(interfacesMonitor.ToArray());
+
+        }
+
+    private void actualizarEstadoDetallePedido()
+        {
+            Estado estadoListo = new Estado();
+            Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
+            DateTime horaActual = getFechaHoraActual();
+
+            foreach (Estado e in estados)
+            {
+                if (e.esAmbitoDetallePedido() && e.esListoParaServir())
+                {
+                    estadoListo = e;
+                    break;
+                }
+            }
+
+            foreach (DetalleDePedido dp in detallePedidoSeleccionadosAServir)
+            {
+                dp.finalizar(estadoListo, horaActual);
+            }
+        }
+
+        public void notificar()
+        {
+            Mesa[] mesas = (Mesa[])FachadaPersistencia.getInstancia().Materializar(typeof(Mesa));
+            Pedido[] pedidos = (Pedido[])FachadaPersistencia.getInstancia().Materializar(typeof(Pedido));
+
+            foreach (IObservadorDetallePedido o in observadores)
+            {
+                foreach (DetalleDePedido d in detallePedidoSeleccionadosAServir)
+                {
+                    o.actualizar(
+                        d.mostrarMesa(mesas, pedidos), 
+                        d.getCantidad());
+                }
+            }
+        }
+
+        public void quitar(IObservadorDetallePedido observador)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void suscribir(IObservadorDetallePedido[] observador)
+        {
+            foreach (IObservadorDetallePedido o in observador)
+            {
+                if (!observadores.Contains(o)) observadores.Add(o);
+            }
+        }
     }
 }

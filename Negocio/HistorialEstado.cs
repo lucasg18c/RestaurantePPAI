@@ -32,6 +32,11 @@ namespace RestaurantePPAI.Negocio
         {
             return estado == enPreparacion;
         }
+
+        public void setFechaHoraFin(DateTime horaActual)
+        {
+            fechaHoraFin = horaActual;
+        }
     }
 
 }

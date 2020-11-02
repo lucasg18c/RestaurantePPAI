@@ -31,5 +31,15 @@ namespace RestaurantePPAI.Negocio
         {
             return nombre == "EnPreparacion";
         }
+
+        public bool esListoParaServir()
+        {
+            return nombre == "ListoParaServir";
+        }
+
+        public bool esNotificado()
+        {
+            return nombre == "Notificado";
+        }
     }
 }

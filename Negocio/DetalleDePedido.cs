@@ -83,5 +83,29 @@ namespace RestaurantePPAI.Negocio
         {
             return hora;
         }
+
+        public void finalizar(Estado estadoListo, DateTime horaActual)
+        {
+            setearFinUltimoHistorial(horaActual);
+            crearHistorial(estadoListo, horaActual);
+        }
+
+        private void crearHistorial(Estado estado, DateTime horaInicio)
+        {
+            HistorialEstado nuevo = new HistorialEstado(estado, horaInicio);
+            historialEstado.Add(nuevo);
+        }
+
+        private void setearFinUltimoHistorial(DateTime horaActual)
+        {
+            HistorialEstado ultimo = obtenerUltimoEstado();
+            ultimo.setFechaHoraFin(horaActual);
+        }
+
+        public void notificar(Estado estadoNotificado, DateTime horaActual)
+        {
+            setearFinUltimoHistorial(horaActual);
+            crearHistorial(estadoNotificado, horaActual);
+        }
     }
 }

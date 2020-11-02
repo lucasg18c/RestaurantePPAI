@@ -18,9 +18,9 @@ namespace RestaurantePPAI.Negocio
             InitializeComponent();
         }
 
-        public void actualizar(string numeroMesa, string estado, DateTime hora, string cantidadProducto, string mozo)
+        public void actualizar(string numeroMesa, string cantidadProducto)
         {
-
+            dgvPedidos.Rows.Add(new string[] { numeroMesa, cantidadProducto });
         }
     }
 }
