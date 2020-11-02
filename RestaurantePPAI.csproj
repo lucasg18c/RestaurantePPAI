@@ -107,5 +107,11 @@
   <ItemGroup>
     <None Include="Resources\flecha-izquierda.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notificacion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\bit-sonoro.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
