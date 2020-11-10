@@ -42,11 +42,10 @@
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnFinalizar = new System.Windows.Forms.Button();
             this.grillaPedidos = new System.Windows.Forms.DataGridView();
+            this.tiempo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.menu = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mesa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tiempo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.finalizar = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -69,11 +68,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 11F);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Italic);
             this.label1.Location = new System.Drawing.Point(4, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 20);
+            this.label1.Size = new System.Drawing.Size(204, 19);
             this.label1.TabIndex = 0;
             this.label1.Text = "Restaurante CoronaByte";
             // 
@@ -86,7 +85,7 @@
             this.lblTitulo.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.lblTitulo.Size = new System.Drawing.Size(770, 68);
             this.lblTitulo.TabIndex = 1;
-            this.lblTitulo.Text = "Productos en Preparación (sector)";
+            this.lblTitulo.Text = "Productos en Preparación (sector ejemplo)";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel2
@@ -164,7 +163,7 @@
             this.btnFinalizar.TabIndex = 0;
             this.btnFinalizar.Text = "Finalizar Pedidos";
             this.btnFinalizar.UseVisualStyleBackColor = true;
-            this.btnFinalizar.Click += new System.EventHandler(this.btnFinalizar_Click);
+            this.btnFinalizar.Click += new System.EventHandler(this.finalizarPedidosSeleccionados);
             // 
             // grillaPedidos
             // 
@@ -185,11 +184,10 @@
             this.grillaPedidos.ColumnHeadersHeight = 60;
             this.grillaPedidos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.grillaPedidos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.tiempo,
             this.producto,
-            this.menu,
             this.cantidad,
             this.mesa,
-            this.tiempo,
             this.finalizar});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -209,19 +207,19 @@
             this.grillaPedidos.Size = new System.Drawing.Size(630, 273);
             this.grillaPedidos.TabIndex = 8;
             // 
+            // tiempo
+            // 
+            this.tiempo.HeaderText = "Hora registrado";
+            this.tiempo.Name = "tiempo";
+            this.tiempo.ReadOnly = true;
+            this.tiempo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // producto
             // 
             this.producto.HeaderText = "Producto";
             this.producto.Name = "producto";
             this.producto.ReadOnly = true;
             this.producto.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // menu
-            // 
-            this.menu.HeaderText = "Menú";
-            this.menu.Name = "menu";
-            this.menu.ReadOnly = true;
-            this.menu.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cantidad
             // 
@@ -236,13 +234,6 @@
             this.mesa.Name = "mesa";
             this.mesa.ReadOnly = true;
             this.mesa.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tiempo
-            // 
-            this.tiempo.HeaderText = "Hora registrado";
-            this.tiempo.Name = "tiempo";
-            this.tiempo.ReadOnly = true;
-            this.tiempo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // finalizar
             // 
@@ -290,11 +281,10 @@
         private System.Windows.Forms.Button btnCancelar;
         private System.Windows.Forms.Button btnFinalizar;
         private System.Windows.Forms.DataGridView grillaPedidos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tiempo;
         private System.Windows.Forms.DataGridViewTextBoxColumn producto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn menu;
         private System.Windows.Forms.DataGridViewTextBoxColumn cantidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn mesa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tiempo;
         private System.Windows.Forms.DataGridViewCheckBoxColumn finalizar;
     }
 }

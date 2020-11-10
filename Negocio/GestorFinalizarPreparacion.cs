@@ -9,18 +9,10 @@ using System.Threading.Tasks;
 namespace RestaurantePPAI.Negocio 
 {
     public class GestorFinalizarPreparacion : ISujetoDetallePedido{
-        //private Estado estado;
-        //private Sesion sesion;
-        //private InterfazDispositivoMovil dispositivoMovil;
-        //private InterfazMonitor monitor;
 
         private List<DetalleDePedido> detallePedidoSeleccionadosAServir = new List<DetalleDePedido>(); 
         private List<DetalleDePedido> detallesPedidoEnPreparacion = new List<DetalleDePedido>(); 
-        private List<DetalleDePedido> detallePedidoNotificados = new List<DetalleDePedido>();
-
         private List<IObservadorDetallePedido> observadores = new List<IObservadorDetallePedido>();
-
-
         private PantallaFinalizarPreparacionPedido pantalla;
 
         public GestorFinalizarPreparacion(PantallaFinalizarPreparacionPedido pantalla)
@@ -28,73 +20,28 @@ namespace RestaurantePPAI.Negocio
             this.pantalla = pantalla;
         }
 
-
         public void finalizarPedido()
         {
             buscarDetallesPedidoEnPreparacion();
-            ordenarSegunMayorTiempoEspera();
-
-            string[] datosDetallesEnPreparacion;
-
-            for (int i = 0; i < detallesPedidoEnPreparacion.Count; i++)
-            {
-                datosDetallesEnPreparacion = buscarInfoDetallePedido(detallesPedidoEnPreparacion[i]);
-                pantalla.mostrarDatosDetallePedidoEnPreparacion(
-                    datosDetallesEnPreparacion[0],
-                    datosDetallesEnPreparacion[1],
-                    datosDetallesEnPreparacion[2],
-                    datosDetallesEnPreparacion[3],
-                    datosDetallesEnPreparacion[4]);
-            }
+            ordenar();
+            mostrarDatosDetalles();
         }
 
-        private string[] buscarInfoDetallePedido(DetalleDePedido detalle)
+        public void confirmarElaboracion()
         {
-            string[] datos = new string[5];
-            Mesa[] mesas = (Mesa[]) FachadaPersistencia.getInstancia().Materializar(typeof(Mesa));
-            Pedido[] pedidos = (Pedido[]) FachadaPersistencia.getInstancia().Materializar(typeof(Pedido));
+            actualizarEstadoDetallePedido();
+            obtenerObservadores();
+            notificar();
+            actualizarEstadoDetallePedidoNotificado();
 
-            datos[0] = detalle.getHora().ToString("hh:mm:ss");
-            datos[1] = detalle.mostrarNombreProducto();
-            datos[2] = detalle.mostrarNombreMenu();
-            datos[3] = detalle.getCantidad();
-            datos[4] = detalle.mostrarMesa(mesas, pedidos);
-
-            return datos;
-        }
-
-        private void ordenarSegunMayorTiempoEspera()
-        {
-            DateTime hora = getFechaHoraActual();
-
-            if (detallesPedidoEnPreparacion.Count <= 1) return;
-
-            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
-            {
-                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
-                {
-                    int esperai = detallesPedidoEnPreparacion[i].calcularEspera(hora);
-                    int esperaj = detallesPedidoEnPreparacion[j].calcularEspera(hora);
-                    if ( esperai < esperaj)
-                    {
-                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
-                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
-                        detallesPedidoEnPreparacion[j] = temp;
-                    }
-                }
-            }            
-        }
-
-        private DateTime getFechaHoraActual()
-        {
-            return DateTime.Now;
+            finCU();
         }
 
         private void buscarDetallesPedidoEnPreparacion()
         {
-            DetalleDePedido[] detalles = (DetalleDePedido[]) FachadaPersistencia.getInstancia().Materializar(typeof(DetalleDePedido));
+            DetalleDePedido[] detalles = (DetalleDePedido[])FachadaPersistencia.getInstancia().Materializar(typeof(DetalleDePedido));
             Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
-            
+
             Estado enPreparacion = new Estado();
 
             foreach (Estado e in estados)
@@ -113,46 +60,106 @@ namespace RestaurantePPAI.Negocio
                     detallesPedidoEnPreparacion.Add(dp);
                 }
             }
-
-
         }
 
-        public void detalleDePedidoSeleccionado(int indice)
+        private void ordenar()
         {
-            detallePedidoSeleccionadosAServir.Add(detallesPedidoEnPreparacion[ indice ]);
-        }
+            if (detallesPedidoEnPreparacion.Count < 2) return;
 
-        public void confirmarElaboracion()
-        {
-            obtenerObservadores();
-            actualizarEstadoDetallePedido();
-            notificar();
-            actualizarEstadoDetallePedidoNotificado();
+            string ordenamiento = pantalla.metodoOrdenamiento();
 
-            finCU();
-
-        }
-
-        private void finCU()
-        {
-            foreach (DetalleDePedido dselec in detallePedidoSeleccionadosAServir)
+            switch (ordenamiento)
             {
-                foreach (DetalleDePedido d in detallesPedidoEnPreparacion)
+                case "Tiempo de espera":
+                    ordenarSegunMayorTiempoEspera();
+                    break;
+                case "Sección":
+                    ordenarSegunSeccion();
+                    break;
+                case "Mesa":
+                    ordenarSegunMesa();
+                    break;
+                case "Mozo":
+                    ordenarSegunMozo();
+                    break;
+            }
+        }
+
+        private void ordenarSegunMayorTiempoEspera()
+        {
+            DateTime hora = getFechaHoraActual();
+
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
+            {
+                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
                 {
-                    if (dselec == d)
+                    int esperai = detallesPedidoEnPreparacion[i].calcularEspera(hora);
+                    int esperaj = detallesPedidoEnPreparacion[j].calcularEspera(hora);
+                    if (esperai < esperaj)
                     {
-                        detallesPedidoEnPreparacion.Remove(d);
-                        break;
+                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
+                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
+                        detallesPedidoEnPreparacion[j] = temp;
                     }
                 }
+            }
+        }
 
+        private void mostrarDatosDetalles()
+        {
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count; i++)
+            {
+                string hora = detallesPedidoEnPreparacion[i].getHora().ToString("hh:mm:ss");
+
+                string nombre = buscarInfoDetallePedido(detallesPedidoEnPreparacion[i]);
+
+                string cantidad = detallesPedidoEnPreparacion[i].getCantidad();
+
+                string mesa = buscarMesaDelDetalleEnPreparacion(detallesPedidoEnPreparacion[i]);
+
+                pantalla.mostrarDatosDetallePedidoEnPreparacion(hora, nombre, cantidad, mesa);
+            }
+        }
+
+        private void actualizarEstadoDetallePedido()
+        {
+            Estado estadoListo = new Estado();
+            Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
+            DateTime horaActual = getFechaHoraActual();
+
+            foreach (Estado e in estados)
+            {
+                if (e.esAmbitoDetallePedido() && e.esListoParaServir())
+                {
+                    estadoListo = e;
+                    break;
+                }
             }
 
-            detallePedidoSeleccionadosAServir = new List<DetalleDePedido>();
-            detallesPedidoEnPreparacion = new List<DetalleDePedido>();
-            pantalla.limpiar();
-            finalizarPedido();
+            foreach (DetalleDePedido dp in detallePedidoSeleccionadosAServir)
+            {
+                dp.finalizar(estadoListo, horaActual);
+            }
+        }
 
+        private void obtenerObservadores()
+        {
+            List<IObservadorDetallePedido> interfaces = new List<IObservadorDetallePedido>();
+            interfaces.AddRange(Program.getMozosMovil());
+            interfaces.AddRange(Program.getMozosMonitor());
+
+            suscribir(interfaces.ToArray());
+        }
+
+        public void notificar()
+        {
+            foreach (IObservadorDetallePedido o in observadores)
+            {
+                foreach (DetalleDePedido d in detallePedidoSeleccionadosAServir)
+                {
+                    o.actualizar(d.mostrarMesa(), d.getCantidad());
+                }
+            }
         }
 
         private void actualizarEstadoDetallePedidoNotificado()
@@ -176,64 +183,124 @@ namespace RestaurantePPAI.Negocio
             }
         }
 
-        private void obtenerObservadores()
-        {
-            List<IObservadorDetallePedido> interfacesMovil = Program.getMozosMovil();
-            //List<IObservadorDetallePedido> interfacesMonitor = Program.getMozosMonitor();
-
-            suscribir(interfacesMovil.ToArray());
-            //suscribir(interfacesMonitor.ToArray());
-
-        }
-
-    private void actualizarEstadoDetallePedido()
-        {
-            Estado estadoListo = new Estado();
-            Estado[] estados = (Estado[])FachadaPersistencia.getInstancia().Materializar(typeof(Estado));
-            DateTime horaActual = getFechaHoraActual();
-
-            foreach (Estado e in estados)
-            {
-                if (e.esAmbitoDetallePedido() && e.esListoParaServir())
-                {
-                    estadoListo = e;
-                    break;
-                }
-            }
-
-            foreach (DetalleDePedido dp in detallePedidoSeleccionadosAServir)
-            {
-                dp.finalizar(estadoListo, horaActual);
-            }
-        }
-
-        public void notificar()
-        {
-            Mesa[] mesas = (Mesa[])FachadaPersistencia.getInstancia().Materializar(typeof(Mesa));
-            Pedido[] pedidos = (Pedido[])FachadaPersistencia.getInstancia().Materializar(typeof(Pedido));
-
-            foreach (IObservadorDetallePedido o in observadores)
-            {
-                foreach (DetalleDePedido d in detallePedidoSeleccionadosAServir)
-                {
-                    o.actualizar(
-                        d.mostrarMesa(mesas, pedidos), 
-                        d.getCantidad());
-                }
-            }
-        }
-
-        public void quitar(IObservadorDetallePedido observador)
-        {
-            throw new NotImplementedException();
-        }
-
         public void suscribir(IObservadorDetallePedido[] observador)
         {
             foreach (IObservadorDetallePedido o in observador)
             {
                 if (!observadores.Contains(o)) observadores.Add(o);
+                //observadores.Add(o);
             }
         }
+
+        public void quitar(IObservadorDetallePedido observador)
+        {
+            observadores.Remove(observador);
+        }
+
+        public void filtrarDetalles()
+        {
+            ordenar();
+            mostrarDatosDetalles();
+        }
+
+        private void ordenarSegunMozo()
+        {
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
+            {
+                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
+                {
+                    string mozoi = detallesPedidoEnPreparacion[i].mostrarMozo();
+                    string mozoj = detallesPedidoEnPreparacion[j].mostrarMozo();
+                    if (mozoi.CompareTo(mozoj) > 0)
+                    {
+                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
+                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
+                        detallesPedidoEnPreparacion[j] = temp;
+                    }
+                }
+            }
+        }
+
+        private void ordenarSegunMesa()
+        {
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
+            {
+                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
+                {
+                    string mesai = detallesPedidoEnPreparacion[i].mostrarMesa();
+                    string mesaj = detallesPedidoEnPreparacion[j].mostrarMesa();
+                    if (mesai.CompareTo(mesaj) > 0)
+                    {
+                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
+                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
+                        detallesPedidoEnPreparacion[j] = temp;
+                    }
+                }
+            }
+        }
+
+        private void ordenarSegunSeccion()
+        {
+            for (int i = 0; i < detallesPedidoEnPreparacion.Count - 1; i++)
+            {
+                for (int j = i + 1; j < detallesPedidoEnPreparacion.Count; j++)
+                {
+                    string seccioni = detallesPedidoEnPreparacion[i].getSeccion();
+                    string seccionj = detallesPedidoEnPreparacion[j].getSeccion();
+                    if (seccioni.CompareTo(seccionj) > 0)
+                    {
+                        DetalleDePedido temp = detallesPedidoEnPreparacion[i];
+                        detallesPedidoEnPreparacion[i] = detallesPedidoEnPreparacion[j];
+                        detallesPedidoEnPreparacion[j] = temp;
+                    }
+                }
+            }
+        }
+
+        private string buscarMesaDelDetalleEnPreparacion(DetalleDePedido detalleDePedido)
+        {
+            return detalleDePedido.mostrarMesa();
+        }
+
+        private string buscarInfoDetallePedido(DetalleDePedido detalle)
+        {
+            if (detalle.esProductoDeCarta()) return detalle.mostrarNombreProducto();
+
+            return detalle.mostrarNombreMenu();
+        }
+
+        private DateTime getFechaHoraActual()
+        {
+            return DateTime.Now;
+        }
+
+        public void detalleDePedidoSeleccionado(int indice)
+        {
+            detallePedidoSeleccionadosAServir.Add(detallesPedidoEnPreparacion[ indice ]);
+        }
+
+
+        private void finCU()
+        {
+            foreach (DetalleDePedido dselec in detallePedidoSeleccionadosAServir)
+            {
+                foreach (DetalleDePedido d in detallesPedidoEnPreparacion)
+                {
+                    if (dselec == d)
+                    {
+                        detallesPedidoEnPreparacion.Remove(d);
+                        break;
+                    }
+                }
+
+            }
+
+            detallePedidoSeleccionadosAServir = new List<DetalleDePedido>();
+            detallesPedidoEnPreparacion = new List<DetalleDePedido>();
+            pantalla.limpiar();
+            finalizarPedido();
+            //pantalla.Close();
+        }
+
     }
 }

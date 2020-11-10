@@ -32,16 +32,16 @@ namespace RestaurantePPAI.Persistencia
             estados.Add(listo);
             estados.Add(notificado);
 
-            detalles.Add(new DetalleDePedido(3, DateTime.Now, new ProductoDeCarta(new Producto("Hamburguesa", 300)), enPreparacion));
-            detalles.Add(new DetalleDePedido(1, new DateTime(2020, 10, 31, 22, 20,0), new ProductoDeCarta(new Producto("Pizza", 400)), enPreparacion));
-            detalles.Add(new DetalleDePedido(3, new DateTime(2020, 10, 31, 22, 38,0), new ProductoDeCarta(new Producto("Milanesa", 250)), enPreparacion));
-            detalles.Add(new DetalleDePedido(2, new DateTime(2020, 10, 31, 22, 10,0), new ProductoDeCarta(new Producto("Zapallo", 900)), enPreparacion));
-            detalles.Add(new DetalleDePedido(5, new DateTime(2020, 10, 31, 22, 13,0), new ProductoDeCarta(new Producto("Fideos", 120)), enPreparacion));
+            pedidos.Add(new Pedido());
+            pedidos.Add(new Pedido());
+            pedidos.Add(new Pedido());
 
+            detalles.Add(new DetalleDePedido(pedidos[0], 3, DateTime.Now, new ProductoDeCarta(new Producto("Hamburguesa", 300)), enPreparacion));
+            detalles.Add(new DetalleDePedido(pedidos[0], 1, new DateTime(2020, 10, 31, 22, 20,0), new ProductoDeCarta(new Producto("Pizza", 400)), enPreparacion));
+            detalles.Add(new DetalleDePedido(pedidos[1], 3, new DateTime(2020, 10, 31, 22, 38,0), new ProductoDeCarta(new Producto("Milanesa", 250)), enPreparacion));
+            detalles.Add(new DetalleDePedido(pedidos[2], 2, new DateTime(2020, 10, 31, 22, 10,0), new ProductoDeCarta(new Producto("Zapallo", 900)), enPreparacion));
+            detalles.Add(new DetalleDePedido(pedidos[2], 5, new DateTime(2020, 10, 31, 22, 13,0), new ProductoDeCarta(new Producto("Fideos", 120)), enPreparacion));
 
-            pedidos.Add(new Pedido());
-            pedidos.Add(new Pedido());
-            pedidos.Add(new Pedido());
 
             pedidos[0].agregarDetalle(detalles[0]);
             pedidos[0].agregarDetalle(detalles[1]);
@@ -52,8 +52,11 @@ namespace RestaurantePPAI.Persistencia
 
             for (int i = 0; i < 3; i++)
             {
-                mesas.Add(new Mesa(23 + i * 2));
-                mesas[i].agregarPedido(pedidos[i]);
+                Mesa m = new Mesa(23 + i * 2);
+                m.agregarPedido(pedidos[i]);
+                m.setSeccion(new Seccion($"sección {23 + i * 2}"));
+                mesas.Add(m);
+                pedidos[i].setMesa(m);
             }
         }
 

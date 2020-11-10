@@ -13,15 +13,17 @@ namespace RestaurantePPAI.Negocio
         private DateTime hora;
         private double precio;
         private ProductoDeCarta producto;
+        private Pedido pedido;
         //private TiempoPresentacion tiempo;
         //private DetalleFactura detalleFactura;
         private Menu menu;
 
-        public DetalleDePedido(int cantidad, DateTime hora, ProductoDeCarta producto, Estado estado)
+        public DetalleDePedido(Pedido pedido, int cantidad, DateTime hora, ProductoDeCarta producto, Estado estado)
         {
             this.cantidad = cantidad;
             this.hora = hora;
             this.producto = producto;
+            this.pedido = pedido;
             precio = producto.getPrecio();
             historialEstado.Add(new HistorialEstado(estado, hora));
         }
@@ -58,20 +60,19 @@ namespace RestaurantePPAI.Negocio
             return (int) (hora - this.hora).TotalMinutes;
         }
 
-        public string mostrarMesa(Mesa[] mesas, Pedido[] pedidos)
+        public bool esProductoDeCarta()
         {
-            Pedido pedido = new Pedido();
+            return producto != null;
+        }
+        
+        public bool esMenuDeCarta()
+        {
+            return menu != null;
+        }
 
-            foreach (Pedido p in pedidos)
-            {
-                if (p.tieneDetalle(this))
-                {
-                    pedido = p;
-                    break;
-                }
-            }
-
-            return pedido.mostrarMesa(mesas);
+        public string mostrarMesa()
+        {
+            return pedido.mostrarMesa();
         }
 
         public string getCantidad()
@@ -96,6 +97,16 @@ namespace RestaurantePPAI.Negocio
             historialEstado.Add(nuevo);
         }
 
+        public string mostrarMozo()
+        {
+            return pedido.mostrarMozo();
+        }
+
+        public string getSeccion()
+        {
+            return pedido.getSeccion();
+        }
+
         private void setearFinUltimoHistorial(DateTime horaActual)
         {
             HistorialEstado ultimo = obtenerUltimoEstado();
@@ -107,5 +118,6 @@ namespace RestaurantePPAI.Negocio
             setearFinUltimoHistorial(horaActual);
             crearHistorial(estadoNotificado, horaActual);
         }
+
     }
 }

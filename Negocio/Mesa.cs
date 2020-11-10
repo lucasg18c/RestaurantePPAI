@@ -10,15 +10,11 @@ namespace RestaurantePPAI.Negocio
     {
         private int numero;
         private List<Pedido> pedidos = new List<Pedido>();
+        private Seccion seccion;
 
         public Mesa(int numero)
         {
             this.numero = numero;
-        }
-
-        public string mostrarMesa()
-        {
-            return numero.ToString();
         }
 
         public bool tienePedido(Pedido pedido)
@@ -30,9 +26,24 @@ namespace RestaurantePPAI.Negocio
             return false;
         }
 
+        public string mostrarNumero()
+        {
+            return numero.ToString();
+        }
+
         public void agregarPedido(Pedido p)
         {
             pedidos.Add(p);
+        }
+
+        public void setSeccion(Seccion seccion)
+        {
+            this.seccion = seccion;
+        }
+
+        public string getSeccion()
+        {
+            return seccion.mostrarSeccion();
         }
     }
 }

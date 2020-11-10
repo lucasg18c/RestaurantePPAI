@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Negocio\AsignacionMesa.cs" />
     <Compile Include="Negocio\Estado.cs" />
+    <Compile Include="Negocio\Seccion.cs" />
     <Compile Include="Persistencia\FachadaPersistencia.cs" />
     <Compile Include="Presentacion\InterfazDispositivoMovil.cs">
       <SubType>Form</SubType>
@@ -65,6 +66,12 @@
     <Compile Include="Negocio\HistorialEstado.cs" />
     <Compile Include="Negocio\GestorFinalizarPreparacion.cs" />
     <Compile Include="Negocio\DetalleDePedido.cs" />
+    <Compile Include="Presentacion\InterfazMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\InterfazMonitor.Designer.cs">
+      <DependentUpon>InterfazMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Soporte\IObservadorDetallePedido.cs" />
     <Compile Include="Soporte\ISujetoDetallePedido.cs" />
     <Compile Include="Presentacion\PantallaFinalizarPreparacionPedido.cs">
@@ -77,6 +84,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Presentacion\InterfazDispositivoMovil.resx">
       <DependentUpon>InterfazDispositivoMovil.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentacion\InterfazMonitor.resx">
+      <DependentUpon>InterfazMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\PantallaFinalizarPreparacionPedido.resx">
       <DependentUpon>PantallaFinalizarPreparacionPedido.cs</DependentUpon>

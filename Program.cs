@@ -1,4 +1,5 @@
 ﻿using RestaurantePPAI.Negocio;
+using RestaurantePPAI.Presentacion;
 using RestaurantePPAI.Soporte;
 using System;
 using System.Collections.Generic;
@@ -22,18 +23,26 @@ namespace RestaurantePPAI
             mozosMovil.Add(new InterfazDispositivoMovil());
             mozosMovil.Add(new InterfazDispositivoMovil());
 
+            mozosMonitor.Add(new InterfazMonitor());
+
             foreach (IObservadorDetallePedido m in mozosMovil) ((Form)m).Show();
+            foreach (IObservadorDetallePedido m in mozosMonitor) ((Form)m).Show();
 
             Application.Run(new PantallaFinalizarPreparacionPedido());
 
         }
 
         static List<IObservadorDetallePedido> mozosMovil = new List<IObservadorDetallePedido>();
-        static List<IObservadorDetallePedido> mozosMonitor;
+        static List<IObservadorDetallePedido> mozosMonitor = new List<IObservadorDetallePedido>();
 
         public static List<IObservadorDetallePedido> getMozosMovil()
         {
             return mozosMovil;
+        }
+
+        public static List<IObservadorDetallePedido> getMozosMonitor()
+        {
+            return mozosMonitor;
         }
     }
 }

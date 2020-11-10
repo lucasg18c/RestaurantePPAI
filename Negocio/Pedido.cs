@@ -11,38 +11,35 @@ namespace RestaurantePPAI.Negocio
         private List<HistorialEstado> historialEstado = new List<HistorialEstado>();
         private int numeroPedido;
         private string fechaHoraPedido;
+        private Mesa mesa;
         private List<DetalleDePedido> detalle = new List<DetalleDePedido>();
 
-        public string mostrarMesa(Mesa[] mesas)
+        public string mostrarMesa()
         {
-            Mesa mesaActual = new Mesa(0);
-
-            foreach (Mesa m in mesas)
-            {
-                if (m.tienePedido(this))
-                {
-                    mesaActual = m;
-                    break;
-                }
-            }
-            return mesaActual.mostrarMesa();
-        }
-
-        public bool tieneDetalle(DetalleDePedido detalleDePedido)
-        {
-            foreach (DetalleDePedido d in detalle)
-            {
-                if (d == detalleDePedido)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return mesa.mostrarNumero();
         }
 
         public void agregarDetalle(DetalleDePedido dp)
         {
             detalle.Add(dp);
+        }
+
+        public void setMesa(Mesa mesa)
+        {
+            this.mesa = mesa;
+        }
+
+        public string getSeccion()
+        {
+            return mesa.getSeccion();
+        }
+
+        public string mostrarMozo()
+        {
+            Random r = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return new string(Enumerable.Repeat(chars, 5)
+              .Select(s => s[r.Next(s.Length)]).ToArray());
         }
     }
 }

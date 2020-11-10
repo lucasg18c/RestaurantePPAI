@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestaurantePPAI.Soporte;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,15 +9,14 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RestaurantePPAI.Soporte;
 
-namespace RestaurantePPAI.Negocio
+namespace RestaurantePPAI.Presentacion
 {
-    public partial class InterfazDispositivoMovil : Form, IObservadorDetallePedido
+    public partial class InterfazMonitor : Form, IObservadorDetallePedido
     {
         SoundPlayer sp;
 
-        public InterfazDispositivoMovil()
+        public InterfazMonitor()
         {
             InitializeComponent();
             sp = new SoundPlayer(@"C:\Users\lucas\Desktop\RestaurantePPAI\Resources\bit-sonoro.wav");
@@ -29,22 +29,23 @@ namespace RestaurantePPAI.Negocio
             mostrarNotificacion();
         }
 
-        private void visualizar(string numeroMesa, string cantidadProducto)
-        {
-            dgvPedidos.Rows.Add(new string[] { numeroMesa, cantidadProducto });
-        }
-
         private void mostrarNotificacion()
         {
-            timer1.Start();
             imgCampana.Visible = true;
+            timer1.Start();
             sp.Play();
+
+        }
+
+        private void visualizar(string numeroMesa, string cantidadProducto)
+        {
+            grillaPedidos.Rows.Add(new string[] { numeroMesa, cantidadProducto });
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            timer1.Stop();
             imgCampana.Visible = false;
+            timer1.Stop();
         }
     }
 }

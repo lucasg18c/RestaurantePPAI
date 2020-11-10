@@ -9,3 +9,4 @@ C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.exe
 C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.pdb
 C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.PantallaFinalizarPreparacionPedido.resources
 C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.Negocio.InterfazDispositivoMovil.resources
+C:\Users\lucas\Desktop\RestaurantePPAI\obj\Debug\RestaurantePPAI.Presentacion.InterfazMonitor.resources
